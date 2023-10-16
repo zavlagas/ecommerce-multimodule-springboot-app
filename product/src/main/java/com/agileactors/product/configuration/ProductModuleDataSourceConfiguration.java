@@ -30,13 +30,11 @@ public class ProductModuleDataSourceConfiguration extends AbstractMongoClientCon
     @Value("${product.mongodb.database}")
     private String databaseName;
 
+
     private Optional<Map<String, PlatformTransactionManager>> transactionManagerHandler = Optional.empty();
 
-
     @Autowired(required = false)
-    public void ProductModuleDataSourceConfiguration(@Qualifier("transactionManagerHandler") Map<
-            String,
-            PlatformTransactionManager> transactionManagerHandler) {
+    public void setTransactionManagerHandler(@Qualifier("transactionManagerHandler") Map<String, PlatformTransactionManager> transactionManagerHandler) {
         this.transactionManagerHandler = Optional.ofNullable(transactionManagerHandler);
     }
 
@@ -58,10 +56,7 @@ public class ProductModuleDataSourceConfiguration extends AbstractMongoClientCon
 
     @Bean(name = "productTransactionManager")
     public MongoTransactionManager transactionManager() {
-        final MongoTransactionManager mongoTransactionManager = new MongoTransactionManager(
+        return new MongoTransactionManager(
                 new SimpleMongoClientDatabaseFactory(mongoClient(), getDatabaseName()));
-        transactionManagerHandler.
-                ifPresent(transactionManagerHandler -> transactionManagerHandler.put("com.agileactors.product", mongoTransactionManager));
-        return mongoTransactionManager;
     }
 }

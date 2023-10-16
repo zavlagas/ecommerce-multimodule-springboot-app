@@ -44,10 +44,8 @@ public class ShopModuleDataSourceConfiguration {
 
     private Optional<Map<String, PlatformTransactionManager>> transactionManagerHandler = Optional.empty();
 
-
     @Autowired(required = false)
-    public void ShopModuleDataSourceConfiguration(
-            @Qualifier("transactionManagerHandler") Map<String, PlatformTransactionManager> transactionManagerHandler) {
+    public void setTransactionManagerHandler(@Qualifier("transactionManagerHandler") Map<String, PlatformTransactionManager> transactionManagerHandler) {
         this.transactionManagerHandler = Optional.ofNullable(transactionManagerHandler);
     }
 
@@ -79,10 +77,7 @@ public class ShopModuleDataSourceConfiguration {
     @Bean(name = "shopTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("shopEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        final JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory);
-        transactionManagerHandler.
-                ifPresent(transactionManagerHandler -> transactionManagerHandler.put("com.agileactors.shop", jpaTransactionManager));
-        return jpaTransactionManager;
+        return new JpaTransactionManager(entityManagerFactory);
     }
 
 }

@@ -41,10 +41,8 @@ public class CustomerModuleDataSourceConfiguration {
 
     private Optional<Map<String, PlatformTransactionManager>> transactionManagerHandler = Optional.empty();
 
-
     @Autowired(required = false)
-    public void CustomerModuleDataSourceConfiguration(
-            @Qualifier("transactionManagerHandler") Map<String, PlatformTransactionManager> transactionManagerHandler) {
+    public void setTransactionManagerHandler(@Qualifier("transactionManagerHandler") Map<String, PlatformTransactionManager> transactionManagerHandler) {
         this.transactionManagerHandler = Optional.ofNullable(transactionManagerHandler);
     }
 
@@ -76,9 +74,7 @@ public class CustomerModuleDataSourceConfiguration {
     @Bean(name = "customerTransactionManager")
     public PlatformTransactionManager transactionManager(
             @Qualifier("customerEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        final JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(entityManagerFactory);
-        transactionManagerHandler.ifPresent(transactionManagerHandler -> transactionManagerHandler.put("com.agileactors.customer", jpaTransactionManager));
-        return jpaTransactionManager;
+        return new JpaTransactionManager(entityManagerFactory);
     }
 
 }

@@ -10,5 +10,4 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @Import(ProductModuleDataSourceConfiguration.class)
 public class ProductModuleConfiguration {
 
-
 }
